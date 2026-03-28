@@ -32,7 +32,7 @@ Each question object has the following structure:
     cat: "Budgeting",
     // TD: Decoration of the quiz question 
     q: "What is the 50/30/20 budget rule?",
-    // TD:An array of answer options for the budgeting question, where only one is correct.
+    // TD: An array of answer options for the question, where only one is correct.
     opts: [
       "50% savings, 30% wants, 20% bills",
       "50% needs, 30% wants, 20% savings/debt",
