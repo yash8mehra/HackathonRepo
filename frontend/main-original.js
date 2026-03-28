@@ -2,7 +2,6 @@
 // Multiple-choice quiz with score tracking
 import { questions } from "./questions-original.js";
 import { setState, applyAgeMode } from "./state.js";
-import { getAgeMode, getGenerationName } from "./generations.js";
 import { renderQuestion } from "./quiz-original.js";
 import { showResults } from "./results-original.js";
 
@@ -28,20 +27,20 @@ document.querySelectorAll(".radio-btn").forEach((btn) => {
 
 document.getElementById("start-btn").addEventListener("click", () => {
   const name = document.getElementById("name-input").value.trim();
-  const age = parseInt(document.getElementById("age-input").value);
+  const generationSelect = document.getElementById("generation-input");
+  const selectedGeneration = generationSelect.value;
+  const modeFromData = generationSelect.options[generationSelect.selectedIndex].getAttribute("data-mode");
 
   // Read userExp directly from the selected button
   const selectedBtn = document.querySelector(".radio-btn.selected");
   const userExp = selectedBtn ? selectedBtn.dataset.val : "";
 
   if (!name)    { alert("Hey — drop your name first!"); return; }
-  if (!age || age < 10 || age > 110) { alert("Please enter a valid age."); return; }
+  if (!selectedGeneration) { alert("Pick your generation!"); return; }
   if (!userExp) { alert("Pick your experience level!"); return; }
 
-  const mode = getAgeMode(age);
-  const generation = getGenerationName(age);
-  applyAgeMode(mode);
-  setState({ userName: name, userAge: age, userGeneration: generation, ageMode: mode, currentQ: 0, score: 0 });
+  applyAgeMode(modeFromData);
+  setState({ userName: name, userGeneration: selectedGeneration, ageMode: modeFromData, currentQ: 0, score: 0 });
 
   showScreen("quiz-screen");
   renderQuestion();

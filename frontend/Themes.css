@@ -12,7 +12,7 @@ body.mode-elder .question-text   { font-size: clamp(1.4rem, 4vw, 1.9rem); }
 body.mode-elder .option          { font-size: 1.05rem; padding: 20px 24px; }
 body.mode-elder .tip-text        { font-size: 1rem; font-weight: bold; }
 body.mode-elder .feedback-box    { font-size: 1rem; font-weight: bold; }
-body.mode-elder input            { font-size: 1.1rem; padding: 16px; }
+body.mode-elder input            { font-size: 1.1rem; padding: 16px; }\nbody.mode-elder select          { font-size: 1.1rem; padding: 16px; }
 body.mode-elder .btn             { font-size: 1.15rem; padding: 18px 48px; }
 body.mode-elder .logo            { background: linear-gradient(135deg, #f5a623, #e8634a); -webkit-background-clip: text; }
 body.mode-elder .progress-fill   { background: linear-gradient(90deg, #f5a623, #e8634a); }
@@ -28,7 +28,7 @@ body.mode-genz {
 body.mode-genz .logo           { background: linear-gradient(135deg, #ff2d78, #bf5af2); -webkit-background-clip: text; }
 body.mode-genz .progress-fill  { background: linear-gradient(90deg, #ff2d78, #bf5af2); }
 body.mode-genz .q-category     { background: rgba(255,45,120,.1); color: #ff2d78; }
-body.mode-genz input:focus     { border-color: #bf5af2; }
+body.mode-genz input:focus     { border-color: #bf5af2; }\nbody.mode-genz select:focus    { border-color: #bf5af2; }
 body.mode-genz .option:hover   { border-color: #bf5af2; }
 body.mode-genz .btn            { background: #ff2d78; }
 

@@ -2,7 +2,6 @@
 // Self-assessment questionnaire with 1-5 rating scale
 import { questions } from "./questions.js";
 import { setState, applyAgeMode } from "./state.js";
-import { getAgeMode, getGenerationName } from "./generations.js";
 import { renderQuestion } from "./quiz.js";
 import { showResults } from "./results.js";
 
@@ -28,20 +27,25 @@ document.querySelectorAll(".radio-btn").forEach((btn) => {
 
 document.getElementById("start-btn").addEventListener("click", () => {
   const name = document.getElementById("name-input").value.trim();
-  const age = parseInt(document.getElementById("age-input").value);
+  const generationSelect = document.getElementById("generation-input");
+  const selectedGeneration = generationSelect.value;
+  const modeFromData = generationSelect.options[generationSelect.selectedIndex].getAttribute("data-mode");
 
   // Read userExp directly from the selected button
   const selectedBtn = document.querySelector(".radio-btn.selected");
   const userExp = selectedBtn ? selectedBtn.dataset.val : "";
 
-  if (!name)    { alert("Hey — drop your name first!"); return; }
-  if (!age || age < 10 || age > 110) { alert("Please enter a valid age."); return; }
-  if (!userExp) { alert("Pick your experience level!"); return; }
+  // Check for self-rating if it exists on the page
+  const selfRatingElement = document.getElementById("self-rating");
+  const selfRating = selfRatingElement ? selfRatingElement.value : "";
 
-  const mode = getAgeMode(age);
-  const generation = getGenerationName(age);
-  applyAgeMode(mode);
-  setState({ userName: name, userAge: age, userGeneration: generation, ageMode: mode, currentQ: 0 });
+  if (!name)    { alert("Hey — drop your name first!"); return; }
+  if (!selectedGeneration) { alert("Pick your generation!"); return; }
+  if (!userExp) { alert("Pick your experience level!"); return; }
+  if (selfRatingElement && !selfRating) { alert("Please rate your finance knowledge!"); return; }
+
+  applyAgeMode(modeFromData);
+  setState({ userName: name, userGeneration: selectedGeneration, ageMode: modeFromData, currentQ: 0 });
 
   // Initialize ratings storage
   if (!window.ratings) window.ratings = {};
@@ -70,6 +74,10 @@ document.getElementById("restart-btn").addEventListener("click", () => {
   document.getElementById("name-input").value = "";
   document.getElementById("age-input").value = "";
   document.querySelectorAll(".radio-btn").forEach((b) => b.classList.remove("selected"));
+  const selfRatingElement = document.getElementById("self-rating");
+  if (selfRatingElement) {
+    selfRatingElement.value = "";
+  }
   window.ratings = {};
   setState({ userExp: "", ageMode: "default" });
   showScreen("intro-screen");

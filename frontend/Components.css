@@ -18,7 +18,8 @@ label {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+select {
   width: 100%;
   background: #1c1c28;
   border: 1px solid var(--border);
@@ -31,8 +32,14 @@ input[type="number"] {
   transition: border-color .2s;
   margin-bottom: 24px;
 }
-input:focus {
+input:focus,
+select:focus {
   border-color: var(--accent);
+}
+
+select option {
+  background: #1c1c28;
+  color: var(--text);
 }
 
 /* ===================== RADIO GROUP ===================== */
