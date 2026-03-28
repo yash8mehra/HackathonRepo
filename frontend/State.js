@@ -1,6 +1,6 @@
 // ===================== STATE =====================
 export let userName = "";
-export let userAge = 0;
+export let userGen = "";
 export let userExp = "";
 export let ageMode = "default"; // 'genz' | 'millennial' | 'elder'
 export let currentQ = 0;
