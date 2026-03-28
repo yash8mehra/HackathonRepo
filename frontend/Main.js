@@ -26,19 +26,32 @@ document.querySelectorAll(".radio-btn").forEach((btn) => {
 
 document.getElementById("start-btn").addEventListener("click", () => {
   const name = document.getElementById("name-input").value.trim();
-  const age = parseInt(document.getElementById("age-input").value);
+const gen = document.getElementById("gen-select").value;
 
-  // Read userExp directly from the selected button
-  const selectedBtn = document.querySelector(".radio-btn.selected");
-  const userExp = selectedBtn ? selectedBtn.dataset.val : "";
+if (!gen) { alert("Pick your generation!"); return; }
 
-  if (!name)    { alert("Hey — drop your name first!"); return; }
-  if (!age || age < 10 || age > 110) { alert("Please enter a valid age."); return; }
-  if (!userExp) { alert("Pick your experience level!"); return; }
+const genToMode = {
+  silent: "elder",
+  boomer: "elder",
+  genx: "elder",
+  millennial: "millennial",
+  genz: "genz",
+  alpha: "genz",
+  beta: "genz"
+};
 
-  const mode = getAgeMode(age);
-  applyAgeMode(mode);
-  setState({ userName: name, userAge: age, ageMode: mode, currentQ: 0, score: 0 });
+const mode = genToMode[gen];
+
+applyAgeMode(mode);
+
+setState({
+  userName: name,
+  userGen: gen,
+  ageMode: mode,
+  currentQ: 0,
+  score: 0
+});
+
 
   showScreen("quiz-screen");
   renderQuestion();
@@ -62,7 +75,7 @@ document.getElementById("next-btn").addEventListener("click", () => {
 document.getElementById("restart-btn").addEventListener("click", () => {
   document.body.classList.remove("mode-genz", "mode-millennial", "mode-elder");
   document.getElementById("name-input").value = "";
-  document.getElementById("age-input").value = "";
+  document.getElementById("gen-select").value = "";
   document.querySelectorAll(".radio-btn").forEach((b) => b.classList.remove("selected"));
   setState({ userExp: "", ageMode: "default" });
   showScreen("intro-screen");
