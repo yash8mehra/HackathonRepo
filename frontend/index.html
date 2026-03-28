@@ -1,62 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"> <!---character encoding and is allowing the emojis to be printed-->>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!---This is for mobile users, scales it properly to make it look clean-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>💸 FinanceIQ — Know Your Money</title>
-  <!---line below is for loading custom fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Georgia:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"> <!---treat the linked file as CSS styling-->
+
+  <!-- Split CSS: load order matters — base vars first, themes last -->
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="screens.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="quiz.css">
+  <link rel="stylesheet" href="results.css">
+  <link rel="stylesheet" href="themes.css">
 </head>
 <body>
-<div id="app"> <!---id is just a label to the div so it can be referenced later-->
+<div id="app">
 
   <!-- INTRO -->
-  <div id="intro-screen" class="screen active"> <!--id lets js find it, class screen applies styling, class active displays this specific-->
-    <div class="logo">💸 FinanceIQ</div> <!---logo div, CSS handles the big/styled text look-->
-    <p class="tagline">Know your money. Own your future.</p> <!---p tag for subtitle, more semantic than a div for text-->
-    <div class="card"> <!---card div wraps the form inputs, CSS gives it the box/shadow look-->
-      <label>What's your name?</label> <!---descriptive text above the input-->
-      <input type="text" id="name-input" placeholder="Enter your name..." maxlength="30"> <!---text input, id lets JS read the value, maxlength caps it at 30 chars-->
+  <div id="intro-screen" class="screen active">
+    <div class="logo">💸 FinanceIQ</div>
+    <p class="tagline">Know your money. Own your future.</p>
+    <div class="card">
+      <label>What's your name?</label>
+      <input type="text" id="name-input" placeholder="Enter your name..." maxlength="30">
       <label>How old are you?</label>
-      <input type="number" id="age-input" placeholder="Your age..." min="10" max="100"> <!---number input, min/max restrict the range (UI hint only, not real validation)-->
+      <input type="number" id="age-input" placeholder="Your age..." min="10" max="100">
       <label>Which best describes you?</label>
-      <div class="radio-group" id="exp-group"> <!---container for custom radio buttons, id lets JS detect which option was clicked-->
-        <div class="radio-btn" data-val="none">💀 Zero clue</div> <!---data-val stores the value JS reads on click, without parsing the emoji text-->
+      <div class="radio-group" id="exp-group">
+        <div class="radio-btn" data-val="none">💀 Zero clue</div>
         <div class="radio-btn" data-val="some">🧩 Some basics</div>
         <div class="radio-btn" data-val="good">📈 Pretty solid</div>
         <div class="radio-btn" data-val="pro">🏦 Finance nerd</div>
       </div>
     </div>
-    <button class="btn" id="start-btn">Let's Go →</button> <!---submit button, JS listens to this id to trigger the next screen-->
+    <button class="btn" id="start-btn">Let's Go →</button>
   </div>
 
   <!-- QUIZ -->
-  <div id="quiz-screen" class="screen"> <!---no active class, so hidden by default until JS adds it-->
-    <div class="progress-bar"> <!---outer track of the progress bar-->
-      <div class="progress-fill" id="progress-fill"></div> <!---inner fill, JS changes its width to show progress through the quiz-->
+  <div id="quiz-screen" class="screen">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
     </div>
-    <div class="q-meta"> <!---wrapper for the question number and category labels-->
-      <span class="q-num" id="q-num-label">Question 1 of 10</span> <!---JS updates this text as questions advance-->
-      <span class="q-category" id="q-cat-label">Category</span> <!---JS swaps in the real category name for each question-->
+    <div class="q-meta">
+      <span class="q-num" id="q-num-label">Question 1 of 10</span>
+      <span class="q-category" id="q-cat-label">Category</span>
     </div>
-    <div class="question-text" id="question-text"></div> <!---empty on load, JS injects the question text here-->
-    <div class="options" id="options-container"></div> <!---empty on load, JS injects the answer option buttons here-->
-    <div class="feedback-box" id="feedback-box"></div> <!---empty on load, JS injects correct/wrong feedback here after an answer-->
+    <div class="question-text" id="question-text"></div>
+    <div class="options" id="options-container"></div>
+    <div class="feedback-box" id="feedback-box"></div>
     <div class="next-btn-wrap">
-      <button class="btn" id="next-btn" style="display:none">Next →</button> <!---hidden until user picks an answer, JS toggles display to show it-->
+      <button class="btn" id="next-btn" style="display:none">Next →</button>
     </div>
   </div>
 
   <!-- RESULTS -->
-  <div id="results-screen" class="screen"> <!---hidden by default, JS makes it active when quiz is done-->
-    <div id="results-content"></div> <!---empty on load, JS injects the final score and summary here-->
+  <div id="results-screen" class="screen">
+    <div id="results-content"></div>
     <div class="restart-wrap">
-      <button class="btn btn-outline" id="restart-btn">Play Again 🔄</button> <!---btn-outline is a second class for alternate styling, JS listens to restart the quiz-->
+      <button class="btn btn-outline" id="restart-btn">Play Again 🔄</button>
     </div>
   </div>
 
 </div>
-<script src="script.js"></script> <!---loads the JS file at the bottom so all the HTML elements above exist before JS tries to find them-->
+
+<!-- type="module" enables ES module imports across all JS files -->
+<script type="module" src="main.js"></script>
 </body>
 </html>
