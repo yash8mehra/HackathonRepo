@@ -1,12 +1,14 @@
 // ===================== RESULTS =====================
 import { questions } from "./questions.js";
-import { userName, score, ageMode } from "./state.js";
+import { getUserName, getScore, getAgeMode } from "./state.js";
 import { showScreen } from "./main.js";
 
 export function showResults() {
   showScreen("results-screen");
   document.getElementById("progress-fill").style.width = "100%";
 
+  const score = getScore();
+  const ageMode = getAgeMode();
   const pct = Math.round((score / questions.length) * 100);
   const content = document.getElementById("results-content");
 
@@ -36,6 +38,8 @@ export function scoreRingHTML(pct) {
 }
 
 export function buildGenZResults(pct) {
+  const userName = getUserName();
+  const score = getScore();
   let badge, verdict, sub, emoji;
 
   if (pct >= 80) {
@@ -71,6 +75,8 @@ export function buildGenZResults(pct) {
 }
 
 export function buildElderResults(pct) {
+  const userName = getUserName();
+  const score = getScore();
   let verdict, sub;
 
   if (pct >= 80) {
@@ -99,6 +105,8 @@ export function buildElderResults(pct) {
 }
 
 export function buildMillennialResults(pct) {
+  const userName = getUserName();
+  const score = getScore();
   let verdict, sub, emoji;
 
   if (pct >= 80) {

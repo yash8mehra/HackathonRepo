@@ -1,8 +1,9 @@
 // ===================== QUIZ =====================
 import { questions } from "./questions.js";
-import { ageMode, currentQ, score, answered, setState } from "./state.js";
+import { getAgeMode, getCurrentQ, getScore, getAnswered, setState } from "./state.js";
 
 export function renderQuestion() {
+  const currentQ = getCurrentQ();
   const q = questions[currentQ];
 
   document.getElementById("q-num-label").textContent = `Question ${currentQ + 1} of ${questions.length}`;
@@ -29,9 +30,11 @@ export function renderQuestion() {
 }
 
 export function selectAnswer(idx) {
-  if (answered) return;
+  if (getAnswered()) return;
   setState({ answered: true });
 
+  const currentQ = getCurrentQ();
+  const score = getScore();
   const q = questions[currentQ];
   const opts = document.querySelectorAll(".option");
   const correct = idx === q.ans;
@@ -51,6 +54,7 @@ export function selectAnswer(idx) {
 }
 
 export function getFeedback(correct, explain) {
+  const ageMode = getAgeMode();
   if (ageMode === "genz") {
     const correctLines = [
       "No cap, that's right! 🔥",

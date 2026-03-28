@@ -1,6 +1,6 @@
 // ===================== MAIN — event listeners & helpers =====================
 import { questions } from "./questions.js";
-import { setState, getAgeMode, applyAgeMode } from "./state.js";
+import { setState, getAgeMode, applyAgeMode, getCurrentQ } from "./state.js";
 import { renderQuestion } from "./quiz.js";
 import { showResults } from "./results.js";
 
@@ -59,16 +59,14 @@ setState({
 
 // ===================== QUIZ NAV =====================
 document.getElementById("next-btn").addEventListener("click", () => {
-  // Import currentQ lazily to get fresh value after setState
-  import("./state.js").then(({ currentQ }) => {
-    const next = currentQ + 1;
-    setState({ currentQ: next });
-    if (next >= questions.length) {
-      showResults();
-    } else {
-      renderQuestion();
-    }
-  });
+  const currentQ = getCurrentQ();
+  const next = currentQ + 1;
+  setState({ currentQ: next });
+  if (next >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
 });
 
 // ===================== RESTART =====================
