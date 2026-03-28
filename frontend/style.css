@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    max-width: 900px;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.results {
+    margin-top: 40px;
+    padding: 20px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
