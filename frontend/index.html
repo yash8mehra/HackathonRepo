@@ -24,8 +24,18 @@
     <div class="card">
       <label>What's your name?</label>
       <input type="text" id="name-input" placeholder="Enter your name..." maxlength="30">
-      <label>How old are you?</label>
-      <input type="number" id="age-input" placeholder="Your age..." min="10" max="100">
+     <label for="gen-select">Your Generation</label>
+<select id="gen-select">
+  <option value="">Select your generation...</option>
+  <option value="silent">Silent Generation (1928–1945)</option>
+  <option value="boomer">Baby Boomers (1946–1964)</option>
+  <option value="genx">Generation X (1965–1980)</option>
+  <option value="millennial">Millennials / Gen Y (1981–1996)</option>
+  <option value="genz">Generation Z (1997–2012)</option>
+  <option value="alpha">Generation Alpha (2013–2025)</option>
+  <option value="beta">Generation Beta (~2025 onward)</option>
+</select>
+
       <label>Which best describes you?</label>
       <div class="radio-group" id="exp-group">
         <div class="radio-btn" data-val="none">💀 Zero clue</div>
