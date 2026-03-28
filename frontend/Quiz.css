@@ -92,7 +92,26 @@
   display: none;
   border-left: 3px solid var(--accent);
   background: rgba(0,255,136,.05);
+  animation: feedbackIn .25s ease;
 }
+
+@keyframes feedbackIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Rating 1–3: guidance needed */
+.feedback-box.feedback-low {
+  border-left-color: #ff6b6b;
+  background: rgba(255, 107, 107, .07);
+}
+
+/* Rating 4–5: positive reinforcement */
+.feedback-box.feedback-high {
+  border-left-color: var(--accent);
+  background: rgba(0, 255, 136, .06);
+}
+
 .feedback-box.wrong-fb  { border-color: #ff4757; background: rgba(255,71,87,.05); }
 .feedback-box.visible   { display: block; }
 

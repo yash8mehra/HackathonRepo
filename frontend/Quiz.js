@@ -10,13 +10,11 @@ export function renderQuestion() {
   document.getElementById("question-text").textContent = q;
   document.getElementById("progress-fill").style.width = `${(currentQ / questions.length) * 100}%`;
 
-  // Hide category label for self-assessment (not applicable)
   document.getElementById("q-cat-label").style.display = "none";
 
   const optsContainer = document.getElementById("options-container");
   optsContainer.innerHTML = "";
 
-  // Create Likert scale dropdown (1-5)
   const select = document.createElement("select");
   select.id = `q${currentQ}`;
   select.className = "rating-select";
@@ -51,16 +49,18 @@ export function renderQuestion() {
   // Hide feedback and next button initially
   const fb = document.getElementById("feedback-box");
   fb.style.display = "none";
+  fb.innerHTML = "";
   document.getElementById("next-btn").style.display = "none";
 }
 
 export function selectRating(value) {
   if (value === "") return;
 
-  // Store the rating
-  const currentQ = parseInt(document.getElementById("q-num-label").textContent.split(" ")[1]) - 1;
+  const qIndex = parseInt(document.getElementById("q-num-label").textContent.split(" ")[1]) - 1;
+  const rating = parseInt(value);
+
   if (!window.ratings) window.ratings = {};
-  window.ratings[currentQ] = parseInt(value);
+  window.ratings[qIndex] = rating;
 
   document.getElementById("next-btn").style.display = "inline-block";
 }
