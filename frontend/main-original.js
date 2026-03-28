@@ -1,10 +1,10 @@
-// ===================== MAIN — event listeners & helpers =====================
-// Self-assessment questionnaire with 1-5 rating scale
-import { questions } from "./questions.js";
+// ===================== MAIN ORIGINAL — event listeners & helpers =====================
+// Multiple-choice quiz with score tracking
+import { questions } from "./questions-original.js";
 import { setState, applyAgeMode } from "./state.js";
 import { getAgeMode, getGenerationName } from "./generations.js";
-import { renderQuestion } from "./quiz.js";
-import { showResults } from "./results.js";
+import { renderQuestion } from "./quiz-original.js";
+import { showResults } from "./results-original.js";
 
 // ===================== HELPERS =====================
 export function showScreen(id) {
@@ -41,10 +41,7 @@ document.getElementById("start-btn").addEventListener("click", () => {
   const mode = getAgeMode(age);
   const generation = getGenerationName(age);
   applyAgeMode(mode);
-  setState({ userName: name, userAge: age, userGeneration: generation, ageMode: mode, currentQ: 0 });
-
-  // Initialize ratings storage
-  if (!window.ratings) window.ratings = {};
+  setState({ userName: name, userAge: age, userGeneration: generation, ageMode: mode, currentQ: 0, score: 0 });
 
   showScreen("quiz-screen");
   renderQuestion();
@@ -70,7 +67,6 @@ document.getElementById("restart-btn").addEventListener("click", () => {
   document.getElementById("name-input").value = "";
   document.getElementById("age-input").value = "";
   document.querySelectorAll(".radio-btn").forEach((b) => b.classList.remove("selected"));
-  window.ratings = {};
   setState({ userExp: "", ageMode: "default" });
   showScreen("intro-screen");
 });

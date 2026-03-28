@@ -1,160 +1,104 @@
 // ===================== RESULTS =====================
+// Show learning areas for questions rated below 3
 import { questions } from "./questions.js";
-import { userName, score, ageMode } from "./state.js";
+import { userName, userGeneration } from "./state.js";
 import { showScreen } from "./main.js";
 
 export function showResults() {
   showScreen("results-screen");
   document.getElementById("progress-fill").style.width = "100%";
 
-  const pct = Math.round((score / questions.length) * 100);
+  const ratings = window.ratings || {};
+  const learningAreas = [];
+
+  // Find all ratings below 3
+  questions.forEach((q, i) => {
+    if (ratings[i] && Number(ratings[i]) < 3) {
+      learningAreas.push({ index: i, question: q, rating: ratings[i] });
+    }
+  });
+
   const content = document.getElementById("results-content");
 
-  if (ageMode === "genz") {
-    content.innerHTML = buildGenZResults(pct);
-  } else if (ageMode === "elder") {
-    content.innerHTML = buildElderResults(pct);
+  if (learningAreas.length === 0) {
+    content.innerHTML = buildExcellentResults(userName, userGeneration);
   } else {
-    content.innerHTML = buildMillennialResults(pct);
+    content.innerHTML = buildLearningAreasResults(userName, userGeneration, learningAreas);
   }
 }
 
-export function scoreRingHTML(pct) {
-  const r = 50, cx = 60, cy = 60;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (pct / 100) * circ;
+export function buildExcellentResults(userName, generation) {
   return `
-    <div class="score-ring">
-      <svg width="120" height="120" viewBox="0 0 120 120">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#2a2a3a" stroke-width="10"/>
-        <circle class="ring-circle" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="currentColor" stroke-width="10"
-          stroke-linecap="round"
-          style="color: var(--accent); stroke-dasharray:${circ}; stroke-dashoffset:${offset}; transition: stroke-dashoffset 1s ease;"/>
-      </svg>
-      <div class="ring-text">${pct}%</div>
+    <div class="result-header">
+      <div class="verdict" style="font-size:2rem">🎉 Excellent Work! 🎉</div>
+      <div class="verdict-sub" style="font-size:1.1rem">
+        ${userName} (${generation}), you're crushing it financially!
+      </div>
+      <div class="verdict-sub" style="margin-top:1rem; color:#666;">
+        You seem confident across all areas of financial literacy. Keep building on this momentum—your future self will thank you! 💪
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+      <button class="btn" onclick="document.location='home.html'">← Back Home</button>
     </div>`;
 }
 
-export function buildGenZResults(pct) {
-  let badge, verdict, sub, emoji;
-
-  if (pct >= 80) {
-    badge = '<span class="genz-badge badge-aura">✨ MAIN CHARACTER AURA ✨</span>';
-    verdict = `${userName}, you have AURA 💜`;
-    sub = "No cap, you actually understood all of this. The finance girlies are shaking.";
-    emoji = "🔥💅🏆";
-  } else if (pct >= 50) {
-    badge = '<span class="genz-badge badge-mid">😐 MID ERA</span>';
-    verdict = `${userName}, you're giving... mid 😐`;
-    sub = "Some of the moves were there, but so were the fumbles. We move.";
-    emoji = "🫠📉😅";
-  } else {
-    badge = '<span class="genz-badge badge-sus">💀 KINDA SUS NGL</span>';
-    verdict = `${userName} this is SUS behavior 💀`;
-    sub = "Bro said they know finance and then did this. Not the arc we needed.";
-    emoji = "💀🤡😭";
-  }
+export function buildLearningAreasResults(userName, generation, areas) {
+  // Build the learning areas HTML
+  const areasHTML = areas.map(({ index, question, rating }) => `
+    <div class="learning-area" style="margin:1.5rem 0; padding:1rem; border-left:4px solid #ff6b6b; background:#fff5f5;">
+      <h4 style="margin:0 0 0.5rem 0; color:#d63031;">
+        ${index + 1}. ${question}
+      </h4>
+      <p style="margin:0.5rem 0; font-size:0.95rem; color:#555;">
+        💡 ${getGuidance(index)}
+      </p>
+    </div>
+  `).join("");
 
   return `
     <div class="result-header">
-      ${badge}
-      ${scoreRingHTML(pct)}
-      <div class="confetti-line">${emoji}</div>
-      <div class="verdict" style="font-size:clamp(1.3rem,4vw,1.8rem)">${verdict}</div>
-      <div class="verdict-sub">${sub}</div>
-      <div class="verdict-sub" style="font-size:.8rem;margin-top:4px">${score} / ${questions.length} correct</div>
+      <div class="verdict" style="font-size:1.8rem">📚 Recommended Learning Areas</div>
+      <div class="verdict-sub" style="font-size:1rem; margin:1rem 0;">
+        ${userName} (${generation}), here are some areas to dive deeper into:
+      </div>
     </div>
-    <div class="card tips-section">
-      <h3>Level Up Your Finance Game 📚</h3>
-      ${getTipsHTML(pct)}
+    <div style="background:#f9f9f9; padding:1.5rem; border-radius:8px; margin-top:1.5rem;">
+      ${areasHTML}
+    </div>
+    <div style="margin-top:2rem; padding:1rem; background:#e8f5e9; border-radius:6px; text-align:center;">
+      <p style="margin:0; color:#2d6a4f; font-weight:bold;">
+        Remember: Financial literacy is a journey, not a destination. Start with one area and build from there! 🚀
+      </p>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+      <button class="btn" onclick="document.location='home.html'">← Back Home</button>
     </div>`;
 }
 
-export function buildElderResults(pct) {
-  let verdict, sub;
-
-  if (pct >= 80) {
-    verdict = `Outstanding, ${userName}!`;
-    sub = "Your financial knowledge is commendable. Keep it up and share this wisdom with others.";
-  } else if (pct >= 50) {
-    verdict = `Well done, ${userName}.`;
-    sub = "You have a solid foundation. A little more learning will serve you very well.";
-  } else {
-    verdict = `No worries, ${userName}.`;
-    sub = "Financial literacy is a journey, not a destination. It's never too late to learn.";
-  }
-
-  return `
-    <div class="result-header">
-      ${scoreRingHTML(pct)}
-      <div class="verdict" style="font-size:clamp(1.6rem,5vw,2.2rem)">${verdict}</div>
-      <div class="verdict-sub" style="font-size:1rem">${sub}</div>
-      <div class="verdict-sub" style="font-size:.9rem;margin-top:4px">${score} of ${questions.length} correct</div>
-    </div>
-    <div class="elder-wisdom">${getElderWisdom(pct)}</div>
-    <div class="card tips-section">
-      <h3>Key Takeaways</h3>
-      ${getTipsHTML(pct)}
-    </div>`;
-}
-
-export function buildMillennialResults(pct) {
-  let verdict, sub, emoji;
-
-  if (pct >= 80) {
-    verdict = `${userName}, you're actually crushing it 💪`;
-    sub = "Your financial IQ is legit. Now go make those moves.";
-    emoji = "🚀";
-  } else if (pct >= 50) {
-    verdict = `${userName} — solid start, room to grow`;
-    sub = "You've got the basics. Some gaps to fill but you're on the right track.";
-    emoji = "📈";
-  } else {
-    verdict = `${userName}, we need to talk about money`;
-    sub = "Real talk: the knowledge gaps here could cost you. Let's fix that.";
-    emoji = "💬";
-  }
-
-  return `
-    <div class="result-header">
-      ${scoreRingHTML(pct)}
-      <div class="confetti-line">${emoji}</div>
-      <div class="verdict" style="font-size:clamp(1.2rem,3.5vw,1.7rem)">${verdict}</div>
-      <div class="verdict-sub">${sub}</div>
-      <div class="verdict-sub" style="font-size:.8rem;margin-top:4px">${score} / ${questions.length} correct</div>
-    </div>
-    <div class="card tips-section">
-      <h3>Your Action Plan</h3>
-      ${getTipsHTML(pct)}
-    </div>`;
-}
-
-export function getTipsHTML(pct) {
-  const allTips = [
-    { e: "💰", t: "Start your emergency fund today — even $500 is a meaningful start." },
-    { e: "📊", t: "Try the 50/30/20 rule for one month and see how your spending shifts." },
-    { e: "🏦", t: "If your employer offers a 401(k) match, contribute enough to get the full match — it's free money." },
-    { e: "💳", t: "Pay your credit card in full every month to avoid interest charges completely." },
-    { e: "📈", t: "Open a Roth IRA or brokerage account and start investing, even small amounts." },
-    { e: "🧾", t: "Track your expenses for 30 days — you'll be surprised where the money actually goes." },
+export function getGuidance(index) {
+  const guidance = [
+    "Start tracking your weekly spending using an app or notebook. Awareness is the first step to control.",
+    "Before any purchase, pause and ask: 'Do I have this money?' This simple habit prevents debt spiral.",
+    "Set a small regular savings goal—even $5/week builds the discipline. Use a separate account to keep it safe.",
+    "Try the '24-hour rule'—wait a day before non-essential purchases. Most impulses fade!",
+    "Learn how banks work: deposits, withdrawals, interest. Watch Khan Academy or your bank's tutorial videos.",
+    "Debit = your money now. Credit = borrowing money (pay interest if not cleared monthly). Know the difference!",
+    "Interest is the 'rental fee' for borrowed money. Understand it when borrowing OR saving.",
+    "Read reputable finance books or follow trusted finance creators. Knowledge builds confidence.",
+    "Research different earning paths (jobs, freelancing, investments) to understand life's financial options.",
+    "Start conversations about money at home. Open dialogue reduces shame and builds literacy.",
+    "Before major purchases, check multiple sources. Small savings multiply into big wins annually.",
+    "Ads are designed to manipulate. Recognize them and think critically about what you actually need.",
+    "Use a decision framework: Need it? Use it? Love it? Buy only if 2+ are yes.",
+    "Practice secure digital payments in safe environments. Ask your bank for security tips.",
+    "Never share passwords, use strong PINs, shop on HTTPS sites. Protect your financial identity.",
+    "Write down 3 financial goals (short, medium, long-term). Review and update quarterly.",
+    "Join free financial literacy programs, podcasts, or communities. Finance evolves—keep learning!",
+    "Normalize money talk with peers. Shared learning makes it less intimidating.",
+    "Young people who understand money make better decisions earlier. You're investing in your future!",
+    "Small steps (budgeting in an app, tracking spending) build a sense of control. Start small, build big."
   ];
-
-  const tips = pct < 50 ? allTips : allTips.slice(0, 3);
-  return tips
-    .map(
-      (t) => `
-    <div class="tip-item">
-      <div class="tip-emoji">${t.e}</div>
-      <div class="tip-text">${t.t}</div>
-    </div>`
-    )
-    .join("");
+  return guidance[index] || "Continue learning about this financial topic.";
 }
 
-export function getElderWisdom(pct) {
-  if (pct >= 80)
-    return `"The secret of getting ahead is getting started." — Mark Twain. You clearly got started — and kept going. That is the mark of financial wisdom.`;
-  if (pct >= 50)
-    return `"An investment in knowledge pays the best interest." — Benjamin Franklin. You have a good foundation. A bit more study and you will be in an enviable position.`;
-  return `"It's never too late to start." The most important financial decision you can make today is simply to begin learning and taking small, consistent steps.`;
-}
