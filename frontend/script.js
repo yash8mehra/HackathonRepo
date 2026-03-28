@@ -1,15 +1,47 @@
 // ===================== QUIZ DATA =====================
+
+/*
+TD:
+
+  DESCRIPTION: This section defines the quiz questions and the structure of the quiz data. 
+  Each question is an object with properties for category, question text, answer options, correct answer index, and an explanation for the correct answer. 
+  This data is used to render the quiz questions and provide feedback to the user based on their answers. 
+
+
+NOTE: From lines 21-149: Each question will be set up the same in the following format:
+
+- "cat": The category of the question (e.g., "Budgeting", "Investing").
+- "q": The text of the quiz question.
+- "opts": An array of answer options for the question.
+- "ans": The index of the correct answer in the "opts" array.
+- "explain": A detailed explanation of the correct answer, which is shown after the user selects an option.
+*/
+
+ //TD: Declaration of "Const questions[]" which is an array of objects, where each object represents a quiz question. 
 const questions = [
   {
+
+/*TD: 
+
+Below is the first object in the "questions" array, representing a quiz question about budgeting. Each property of the object is explained in the comments above.
+
+Each question object has the following structure:
+
+*/
+    // TD: Decoration of the object category 
     cat: "Budgeting",
+    // TD: Decoration of the quiz question 
     q: "What is the 50/30/20 budget rule?",
+    // TD:An array of answer options for the budgeting question, where only one is correct.
     opts: [
       "50% savings, 30% wants, 20% bills",
       "50% needs, 30% wants, 20% savings/debt",
       "50% investments, 30% rent, 20% food",
       "50% tax, 30% charity, 20% you",
     ],
+    // TD: The index of the correct answer in the "opts" array.
     ans: 1,
+    // TD: An explanation of the correct answer, which will be displayed to the user after they select an option.
     explain:
       "The 50/30/20 rule: 50% of after-tax income → needs (rent, food), 30% → wants (entertainment), 20% → savings or paying off debt.",
   },
