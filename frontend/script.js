@@ -160,6 +160,9 @@ Each question object has the following structure:
 ];
 
 // ===================== STATE =====================
+
+// TD: Declaration of variables to hold the user's name, age, experience level, quiz state (current question index, score), and whether they've answered the current question.
+
 let userName = "";
 let userAge = 0;
 let userExp = "";
@@ -169,19 +172,37 @@ let score = 0;
 let answered = false;
 
 // ===================== AGE LOGIC =====================
+
+// TD: Functions to determine the user's age group (Gen Z, Millennial, Elder) based on their age input, and to apply corresponding CSS classes for styling the quiz experience.
 function getAgeMode(age) {
-  if (age <= 24) return "genz";
+  if (age <= 25) return "genz";
   if (age <= 40) return "millennial";
   return "elder";
 }
 
+/* TD: This function updates the CSS classes on the body element to apply different styles based on the user's age group. 
+It first removes any existing age mode classes, then adds the class corresponding to the current age mode.
+
+*/
 function applyAgeMode(mode) {
+
+  // TD: Remove any existing age mode classes
+
   document.body.classList.remove("mode-genz", "mode-millennial", "mode-elder");
+
+  // TD: Add the new age mode class
+
   document.body.classList.add("mode-" + mode);
 }
 
 // ===================== INTRO =====================
+
+// TD: Event listeners for the experience level selection buttons and the start button.
+
 document.querySelectorAll(".radio-btn").forEach((btn) => {
+
+/* TD: Add event listener for each experience level button */
+
   btn.addEventListener("click", () => {
     document.querySelectorAll(".radio-btn").forEach((b) => b.classList.remove("selected"));
     btn.classList.add("selected");
@@ -189,13 +210,19 @@ document.querySelectorAll(".radio-btn").forEach((btn) => {
   });
 });
 
+// TD: Event listener for the start button, which validates user input and initializes the quiz state before showing the quiz screen.
+
 document.getElementById("start-btn").addEventListener("click", () => {
   const name = document.getElementById("name-input").value.trim();
   const age = parseInt(document.getElementById("age-input").value);
 
+// TD: Input validation for the user's name, age, and experience level. If any validation fails, an alert is shown and the function returns early to prevent starting the quiz.
+
   if (!name) { alert("Hey — drop your name first!"); return; }
   if (!age || age < 10 || age > 110) { alert("Please enter a valid age."); return; }
   if (!userExp) { alert("Pick your experience level!"); return; }
+
+// TD: If all inputs are valid, the user's name, age, and age mode are set, and the quiz state is initialized before showing the quiz screen.
 
   userName = name;
   userAge = age;
@@ -210,13 +237,23 @@ document.getElementById("start-btn").addEventListener("click", () => {
 });
 
 // ===================== QUIZ =====================
+
+// TD: This function renders the current quiz question and its answer options on the screen. It updates the question number, category, question text, and progress bar. 
+// It also sets up event listeners for the answer buttons and resets the feedback box and next button for a new question.
 function renderQuestion() {
+
+// TD: Get the current question object from the questions array using the current question index.
+
   const q = questions[currentQ];
+
+// TD: Update the question number label, category label, question text, and progress bar based on the current question and total number of questions.
 
   document.getElementById("q-num-label").textContent = `Question ${currentQ + 1} of ${questions.length}`;
   document.getElementById("q-cat-label").textContent = q.cat;
   document.getElementById("question-text").textContent = q.q;
   document.getElementById("progress-fill").style.width = `${(currentQ / questions.length) * 100}%`;
+
+// TD: Clear any existing answer options and create new buttons for each answer option in the current question. Each button has an event listener that calls the selectAnswer function with the index of the selected option.
 
   const optsContainer = document.getElementById("options-container");
   optsContainer.innerHTML = "";
@@ -228,13 +265,21 @@ function renderQuestion() {
     optsContainer.appendChild(btn);
   });
 
+// TD: Reset the feedback box and next button for the new question.
+
   const fb = document.getElementById("feedback-box");
   fb.className = "feedback-box";
   fb.style.display = "none";
 
+// TD: Hide the next button until the user selects an answer.
+
   document.getElementById("next-btn").style.display = "none";
   answered = false;
 }
+
+// TD: This function handles the user's answer selection. It checks if the user has already answered, 
+// updates the score if the answer is correct, disables all options, provides feedback on whether the answer was correct or wrong, 
+// and shows the next button to proceed to the next question.
 
 function selectAnswer(idx) {
   if (answered) return;
@@ -257,6 +302,9 @@ function selectAnswer(idx) {
 
   document.getElementById("next-btn").style.display = "inline-block";
 }
+
+// TD: This function generates feedback text based on whether the user's answer was correct and the explanation for the correct answer. 
+// The feedback is customized based on the user's age group (Gen Z, Millennial, Elder) to provide a more engaging and relevant experience.
 
 function getFeedback(correct, explain) {
   if (ageMode === "genz") {
@@ -297,6 +345,10 @@ document.getElementById("next-btn").addEventListener("click", () => {
 });
 
 // ===================== RESULTS =====================
+
+// TD: This function calculates the user's final score as a percentage, generates the appropriate results content based on the user's age group, 
+// and displays the results screen with a progress bar filled to 100%.
+
 function showResults() {
   showScreen("results-screen");
   document.getElementById("progress-fill").style.width = "100%";
@@ -312,6 +364,8 @@ function showResults() {
     content.innerHTML = buildMillennialResults(pct);
   }
 }
+
+// TD: These functions generate the HTML content for the results screen based on the user's age group and score percentage.
 
 function scoreRingHTML(pct) {
   const r = 50, cx = 60, cy = 60;
@@ -329,8 +383,17 @@ function scoreRingHTML(pct) {
     </div>`;
 }
 
+// TD: The following functions build the results content for each age group (Gen Z, Elder, Millennial) based on the user's score percentage. 
+// Each function returns a string of HTML that includes a badge, verdict, subtext, and tips for improving financial literacy. 
+// The content is customized to be engaging and relevant for each age group.
+
 function buildGenZResults(pct) {
+
+// TD: Declaration of variables to hold the badge, verdict, subtext, and emoji for Gen Z users based on their score percentage.
+
   let badge, verdict, sub, emoji;
+
+// TD: This function builds the results content for Gen Z users based on their score percentage.
 
   if (pct >= 80) {
     badge = '<span class="genz-badge badge-aura">✨ MAIN CHARACTER AURA ✨</span>';
@@ -349,6 +412,8 @@ function buildGenZResults(pct) {
     emoji = "💀🤡😭";
   }
 
+  // TD: Return the HTML content for the Gen Z results, including the badge, score ring, verdict, subtext, and tips section.
+
   return `
     <div class="result-header">
       ${badge}
@@ -364,6 +429,8 @@ function buildGenZResults(pct) {
     </div>`;
 }
 
+// TD: This function builds the results content for Elder users based on their score percentage. 
+
 function buildElderResults(pct) {
   let verdict, sub;
 
@@ -378,6 +445,8 @@ function buildElderResults(pct) {
     sub = "Financial literacy is a journey, not a destination. It's never too late to learn.";
   }
 
+  // TD: Return the HTML content for the Elder results, including the score ring, verdict, subtext, elder wisdom, and tips section.
+
   return `
     <div class="result-header">
       ${scoreRingHTML(pct)}
@@ -391,6 +460,9 @@ function buildElderResults(pct) {
       ${getTipsHTML(pct)}
     </div>`;
 }
+
+// TD: This function builds the results content for Millennial users based on their score percentage. 
+
 
 function buildMillennialResults(pct) {
   let verdict, sub, emoji;
@@ -409,6 +481,8 @@ function buildMillennialResults(pct) {
     emoji = "💬";
   }
 
+  // TD: Return the HTML content for the Millennial results, including the score ring, verdict, subtext, emoji, and tips section.
+
   return `
     <div class="result-header">
       ${scoreRingHTML(pct)}
@@ -423,6 +497,8 @@ function buildMillennialResults(pct) {
     </div>`;
 }
 
+// TD: This function generates the HTML for the tips section of the results screen based on the user's score percentage.
+
 function getTipsHTML(pct) {
   const allTips = [
     { e: "💰", t: "Start your emergency fund today — even $500 is a meaningful start." },
@@ -432,6 +508,8 @@ function getTipsHTML(pct) {
     { e: "📈", t: "Open a Roth IRA or brokerage account and start investing, even small amounts." },
     { e: "🧾", t: "Track your expenses for 30 days — you'll be surprised where the money actually goes." },
   ];
+
+  // TD: If the user's score percentage is below 50%, show all tips. If it's 50% or above, show only the top 3 tips to avoid overwhelming them.
 
   const tips = pct < 50 ? allTips : allTips.slice(0, 3);
   return tips
@@ -445,6 +523,9 @@ function getTipsHTML(pct) {
     .join("");
 }
 
+// TD: This function generates a piece of financial wisdom for Elder users based on their score percentage, 
+// providing encouragement and motivation to continue learning about personal finance.
+
 function getElderWisdom(pct) {
   if (pct >= 80)
     return `"The secret of getting ahead is getting started." — Mark Twain. You clearly got started — and kept going. That is the mark of financial wisdom.`;
@@ -454,6 +535,9 @@ function getElderWisdom(pct) {
 }
 
 // ===================== HELPERS =====================
+
+// TD: This function manages the visibility of different screens in the application. It hides all screens and then shows the one with the specified ID.
+
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
   const el = document.getElementById(id);
@@ -463,6 +547,8 @@ function showScreen(id) {
   el.offsetHeight; // force reflow
   el.style.animation = "";
 }
+
+// TD: Event listener for the restart button, which resets the quiz state, clears user input, and shows the intro screen to allow the user to take the quiz again.
 
 document.getElementById("restart-btn").addEventListener("click", () => {
   document.body.classList.remove("mode-genz", "mode-millennial", "mode-elder");
