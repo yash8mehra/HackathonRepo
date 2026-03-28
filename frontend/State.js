@@ -17,12 +17,7 @@ export function setState(updates) {
   if ("answered"  in updates) answered  = updates.answered;
 }
 
-// ===================== AGE LOGIC =====================
-export function getAgeMode(age) {
-  if (age <= 24) return "genz";
-  if (age <= 40) return "millennial";
-  return "elder";
-}
+
 
 export function applyAgeMode(mode) {
   document.body.classList.remove("mode-genz", "mode-millennial", "mode-elder");
